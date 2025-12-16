@@ -1,0 +1,39 @@
+# PostgreSQL. Versions 9.3 and up are supported.
+#   gem install pg
+#
+#   Ensure the pg gem is defined in your Gemfile
+#   gem "pg"
+#
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  username: sanjana.gupta
+  password: 
+  host: 127.0.0.1
+  port: <%= ENV.fetch("PGPORT", 5432) %>
+
+development:
+  <<: *default
+  database: quiz_management_development
+
+test:
+  <<: *default
+  database: quiz_management_test
+
+production:
+  primary:
+    <<: *default
+    database: quiz_management_production
+  cache:
+    <<: *default
+    database: quiz_management_production_cache
+    migrations_paths: db/cache_migrate
+  queue:
+    <<: *default
+    database: quiz_management_production_queue
+    migrations_paths: db/queue_migrate
+  cable:
+    <<: *default
+    database: quiz_management_production_cable
+    migrations_paths: db/cable_migrate
