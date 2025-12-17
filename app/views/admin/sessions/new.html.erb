@@ -1,0 +1,30 @@
+<h1>Admin Login</h1>
+
+<% if flash[:alert] %>
+  <div class="alert"><%= flash[:alert] %></div>
+<% end %>
+<% if flash[:notice] %>
+  <div class="notice"><%= flash[:notice] %></div>
+<% end %>
+
+<%= form_with model: @admin_user, url: admin_session_path, method: :post, local: true do |f| %>
+  <div>
+    <%= f.label :email %><br>
+    <%= f.email_field :email, required: true, autofocus: true %>
+    <% if @admin_user.errors[:email].present? %>
+      <div class="error"><%= @admin_user.errors[:email].join(', ') %></div>
+    <% end %>
+  </div>
+
+  <div>
+    <%= f.label :password %><br>
+    <%= f.password_field :password, required: true %>
+    <% if @admin_user.errors[:password].present? %>
+      <div class="error"><%= @admin_user.errors[:password].join(', ') %></div>
+    <% end %>
+  </div>
+
+  <div>
+    <%= f.submit "Login" %>
+  </div>
+<% end %>
