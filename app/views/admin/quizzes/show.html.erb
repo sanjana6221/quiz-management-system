@@ -1,0 +1,305 @@
+<% content_for :page_title, @quiz.title %>
+
+<div class="admin-content">
+  <div class="admin-header">
+    <h1><%= @quiz.title %></h1>
+    <div class="admin-actions">
+      <%= link_to "Delete Quiz", admin_quiz_path(@quiz), method: :delete,
+                  confirm: "Are you sure? This will permanently delete the quiz and all submissions.",
+                  class: "btn btn-danger" %>
+      <%= link_to "Back to Quizzes", admin_quizzes_path, class: "btn btn-secondary" %>
+    </div>
+  </div>
+
+  <div class="quiz-details">
+    <% if @quiz.description.present? %>
+      <div class="quiz-description">
+        <h3>Description</h3>
+        <p><%= simple_format(@quiz.description) %></p>
+      </div>
+    <% end %>
+
+    <div class="quiz-meta">
+      <p><strong>Total Questions:</strong> <%= @quiz.questions.count %></p>
+      <p><strong>Created:</strong> <%= @quiz.created_at.strftime("%B %d, %Y at %I:%M %p") %></p>
+      <p><strong>Last Updated:</strong> <%= @quiz.updated_at.strftime("%B %d, %Y at %I:%M %p") %></p>
+    </div>
+  </div>
+
+  <div class="questions-section">
+    <h2>Questions (<%= @quiz.questions.count %>)</h2>
+    
+    <% if @quiz.questions.any? %>
+      <% @quiz.questions.each_with_index do |question, index| %>
+        <div class="question-preview" data-question-id="<%= question.id %>">
+          <div class="question-header">
+            <h3>Question <%= index + 1 %></h3>
+            <span class="question-type"><%= question.question_type.humanize %></span>
+          </div>
+          
+          <div class="question-body">
+            <p><%= simple_format(question.body) %></p>
+          </div>
+
+          <% if question.options.any? %>
+            <div class="question-options">
+              <h4>Answer Options:</h4>
+              <ul class="options-list">
+                <% question.options.each_with_index do |option, option_index| %>
+                  <li class="option-item <%= 'correct' if option.correct? %>">
+                    <span class="option-letter"><%= ('A'.ord + option_index).chr %>)</span>
+                    <span class="option-text"><%= option.text %></span>
+                    <% if option.correct? %>
+                      <span class="correct-indicator">✓ Correct Answer</span>
+                    <% end %>
+                  </li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="empty-state">
+        <p>No questions have been added to this quiz yet.</p>
+        <%= link_to "Add Questions", edit_admin_quiz_path(@quiz), class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<style>
+  .admin-content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .admin-header h1 {
+    margin: 0;
+    color: #333;
+    font-size: 2rem;
+    font-weight: 600;
+  }
+
+  .admin-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .quiz-details {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+  }
+
+  .quiz-description {
+    margin-bottom: 20px;
+  }
+
+  .quiz-description h3 {
+    margin: 0 0 10px 0;
+    color: #555;
+    font-size: 1.1rem;
+  }
+
+  .quiz-description p {
+    margin: 0;
+    line-height: 1.6;
+    color: #666;
+  }
+
+  .quiz-meta p {
+    margin: 5px 0;
+    color: #666;
+  }
+
+  .questions-section {
+    margin-top: 30px;
+  }
+
+  .questions-section h2 {
+    margin: 0 0 20px 0;
+    color: #333;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  .question-preview {
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .question-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+
+  .question-header h3 {
+    margin: 0;
+    color: #333;
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+
+  .question-type {
+    background: #e3f2fd;
+    color: #1976d2;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+
+  .question-body p {
+    margin: 0 0 15px 0;
+    line-height: 1.6;
+    color: #444;
+    font-size: 1rem;
+  }
+
+  .question-options h4 {
+    margin: 0 0 10px 0;
+    color: #555;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .options-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .option-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    margin-bottom: 5px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    background: #fafafa;
+  }
+
+  .option-item.correct {
+    background: #e8f5e8;
+    border-color: #4caf50;
+  }
+
+  .option-letter {
+    font-weight: 600;
+    margin-right: 10px;
+    color: #666;
+    min-width: 20px;
+  }
+
+  .option-text {
+    flex: 1;
+    color: #444;
+  }
+
+  .correct-indicator {
+    color: #4caf50;
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-left: 10px;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 2px dashed #d0d0d0;
+  }
+
+  .empty-state p {
+    margin: 0 0 20px 0;
+    color: #666;
+    font-size: 1.1rem;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+  }
+
+  .btn-primary {
+    background: #007bff;
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background: #0056b3;
+  }
+
+  .btn-danger {
+    background: #dc3545;
+    color: white;
+  }
+
+  .btn-danger:hover {
+    background: #c82333;
+  }
+
+  .btn-secondary {
+    background: #6c757d;
+    color: white;
+  }
+
+  .btn-secondary:hover {
+    background: #545b62;
+  }
+
+  @media (max-width: 768px) {
+    .admin-header {
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .admin-actions {
+      width: 100%;
+      justify-content: flex-start;
+    }
+
+    .question-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .option-item {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 5px;
+    }
+
+    .option-letter {
+      margin-right: 0;
+    }
+  }
+</style>

@@ -1,0 +1,14 @@
+<div class="option-fields nested-fields" data-new-record="<%= f.object.new_record? %>">
+  <div class="option-row">
+    <%= f.text_field :text, placeholder: "Option text", class: "form-input option-text" %>
+    
+    <label class="correct-checkbox">
+      <%= f.check_box :correct %>
+      <span>Correct Answer</span>
+    </label>
+    
+    <%= link_to_remove_association "Remove", f, class: "remove-option btn-danger" %>
+  </div>
+  
+  <%= f.hidden_field :_destroy, class: "destroy-field" %>
+</div>

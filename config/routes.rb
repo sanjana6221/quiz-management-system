@@ -12,6 +12,13 @@ Rails.application.routes.draw do
     delete "/logout", to: "sessions#destroy", as: :logout
 
     get "/", to: "quizzes#index", as: :root
+    
+    # Quiz Management
+    resources :quizzes do
+      resources :questions, except: [:index, :show] do
+        resources :options, except: [:index, :show]
+      end
+    end
   end
 
   # Public routes

@@ -17,15 +17,6 @@
   height: 4rem;
 }
 
-.navbar-brand {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 1.25rem;
-  font-weight: 700;
-  text-decoration: none;
-}
-
 .navbar-nav {
   display: flex;
   align-items: center;
@@ -36,34 +27,6 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-}
-
-/* Public Navbar */
-.navbar-public {
-  background-color: white;
-  color: #111827;
-}
-
-.navbar-public .navbar-brand {
-  color: #2563eb;
-}
-
-.navbar-public .navbar-brand:hover {
-  color: #1d4ed8;
-}
-
-/* Admin Navbar */
-.navbar-admin {
-  background-color: #111827;
-  color: white;
-}
-
-.navbar-admin .navbar-brand {
-  color: white;
-}
-
-.navbar-admin .navbar-brand:hover {
-  color: #e5e7eb;
 }
 
 /* Button Styles */
@@ -202,13 +165,3 @@
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .navbar-nav {
-    display: none;
-  }
-  
-  .navbar-container {
-    padding: 0 0.5rem;
-  }
-}

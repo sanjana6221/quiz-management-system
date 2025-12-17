@@ -3,6 +3,8 @@ class Question < ApplicationRecord
   has_many :options, dependent: :destroy
   has_many :attempt_answers, dependent: :destroy
 
+  accepts_nested_attributes_for :options, allow_destroy: true, reject_if: :all_blank
+
   QUESTION_TYPES = %w[mcq scq].freeze
 
   validates :body, presence: true

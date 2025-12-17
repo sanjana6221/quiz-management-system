@@ -1,0 +1,37 @@
+<div class="question-fields nested-fields" data-new-record="<%= f.object.new_record? %>">
+  <div class="question-header">
+    <h4>Question</h4>
+    <%= link_to_remove_association "Remove", f, class: "remove-question btn-danger" %>
+  </div>
+  
+  <div class="form-group">
+    <%= f.label :body, "Question Text", class: "form-label" %>
+    <%= f.text_area :body, rows: 2, class: "form-input" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :question_type, "Question Type", class: "form-label" %>
+    <%= f.select :question_type, 
+        options_for_select([
+          ['Single Choice (One correct answer)', 'scq'],
+          ['Multiple Choice (Multiple correct answers)', 'mcq']
+        ], f.object.question_type), 
+        { prompt: 'Select question type' }, 
+        { class: "form-input question-type-select" } %>
+  </div>
+
+  <div class="options-section">
+    <h5>Answer Options</h5>
+    <div class="options-container" data-association="options">
+      <%= f.fields_for :options do |option_form| %>
+        <%= render 'option_fields', f: option_form %>
+      <% end %>
+    </div>
+    
+    <div class="form-group">
+      <%= link_to_add_association '+ Add Option', f, :options, class: 'btn-outline' %>
+    </div>
+  </div>
+
+  <%= f.hidden_field :_destroy, class: "destroy-field" %>
+</div>

@@ -1,0 +1,51 @@
+<div class="admin-page">
+  <div class="page-header">
+    <h1 class="page-title">Create New Quiz</h1>
+    <%= link_to "← Back to Quizzes", admin_quizzes_path, class: "btn-outline" %>
+  </div>
+
+  <%= form_with model: [:admin, @quiz], local: true, class: "quiz-form", data: { controller: "cocoon" } do |form| %>
+    <% if @quiz.errors.any? %>
+      <div class="flash flash-alert">
+        <h4><%= pluralize(@quiz.errors.count, "error") %> prohibited this quiz from being saved:</h4>
+        <ul>
+          <% @quiz.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="form-section">
+      <h2 class="section-title">Quiz Details</h2>
+      
+      <div class="form-group">
+        <%= form.label :title, class: "form-label" %>
+        <%= form.text_field :title, class: "form-input" %>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :description, class: "form-label" %>
+        <%= form.text_area :description, rows: 3, class: "form-input" %>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h2 class="section-title">Questions</h2>
+      <div id="questions-container" data-association="questions">
+        <%= form.fields_for :questions do |question_form| %>
+          <%= render 'question_fields', f: question_form %>
+        <% end %>
+      </div>
+      
+      <div class="form-group">
+        <%= link_to_add_association '+ Add Question', form, :questions, class: 'btn-outline' %>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <%= form.submit "Create Quiz", class: "btn-primary" %>
+      <%= link_to "Cancel", admin_quizzes_path, class: "btn-outline" %>
+    </div>
+  <% end %>
+</div>
