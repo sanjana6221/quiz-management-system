@@ -1,6 +1,0 @@
-<h1>Admin Dashboard</h1>
-<p>Welcome, <%= current_admin_user&.email %></p>
-
-<nav>
-  <%= button_to "Logout", admin_logout_path, method: :delete, form: { data: { turbo_confirm: "Are you sure you want to logout?" } } %>
-</nav>

@@ -11,8 +11,7 @@ Rails.application.routes.draw do
     get "/login", to: "sessions#new", as: :login
     delete "/logout", to: "sessions#destroy", as: :logout
 
-    # Dashboard
-    get "/", to: "dashboard#index", as: :root
+    get "/", to: "quizzes#index", as: :root
   end
 
   # Public routes
