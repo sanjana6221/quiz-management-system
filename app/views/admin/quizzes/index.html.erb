@@ -1,32 +1,36 @@
 <div class="admin-page">
   <div class="page-header">
-    <h1 class="page-title">Manage Quizzes</h1>
+    <h1>Manage Quizzes</h1>
     <%= link_to "New Quiz", new_admin_quiz_path, class: "btn-primary" %>
   </div>
 
   <% if @quizzes.any? %>
-    <div class="quiz-grid">
-      <% @quizzes.each do |quiz| %>
-        <div class="quiz-card">
-          <div class="quiz-card-header">
-            <h3 class="quiz-title"><%= quiz.title %></h3>
-            <span class="quiz-question-count"><%= pluralize(quiz.questions.count, 'question') %></span>
-          </div>
-          
-          <% if quiz.description.present? %>
-            <p class="quiz-description"><%= truncate(quiz.description, length: 100) %></p>
-          <% end %>
-          
-          <div class="quiz-card-actions">
-            <%= link_to "View", admin_quiz_path(quiz), class: "btn-outline" %>
-            <%= button_to "Delete", admin_quiz_path(quiz), 
-                method: :delete,
-                class: "btn-danger",
-                form: { data: { turbo_confirm: "Are you sure you want to delete this quiz?" } } %>
-          </div>
-        </div>
-      <% end %>
-    </div>
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Description</th>
+          <th>Questions</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @quizzes.each do |quiz| %>
+          <tr>
+            <td><strong><%= quiz.title %></strong></td>
+            <td><%= truncate(quiz.description, length: 80) if quiz.description.present? %></td>
+            <td class="text-center"><%= quiz.questions.count %></td>
+            <td>
+              <%= link_to "View", admin_quiz_path(quiz), class: "btn-outline" %>
+              <%= button_to "Delete", admin_quiz_path(quiz), 
+                  method: :delete,
+                  class: "btn-danger btn-small",
+                  form: { data: { turbo_confirm: "Are you sure you want to delete this quiz?" } } %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
   <% else %>
     <div class="empty-state">
       <h3>No quizzes yet</h3>

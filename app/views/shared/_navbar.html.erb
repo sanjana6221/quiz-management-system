@@ -5,16 +5,16 @@
       <div>
         <%= link_to root_path do %>
           <span class="font-bold text-2xl">⚡</span>
-          <span>Dashboard</span>
+          <span>Home</span>
         <% end %>
       </div>
 
       <div class="navbar-nav">
         <%= link_to "Take Quiz", quizzes_path, 
-            class: nav_link_class(controller_name == 'quizzes') %>
+            class: "nav-link" %>
         
         <%= link_to "Quizzes", admin_quizzes_path, 
-            class: admin_nav_link_class(controller_name == 'quizzes' && admin_signed_in?) %>
+            class: "nav-link" %>
       </div>
       
       <!-- Actions -->

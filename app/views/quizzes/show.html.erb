@@ -1,0 +1,423 @@
+<% content_for :page_title, @quiz.title %>
+
+<div class="public-container">
+  <div class="quiz-container">
+    <div class="quiz-header">
+      <h1><%= @quiz.title %></h1>
+      <% if @quiz.description.present? %>
+        <p class="quiz-description"><%= simple_format(@quiz.description) %></p>
+      <% end %>
+      
+      <div class="quiz-info">
+        <div class="info-item">
+          <span class="info-label">Questions</span>
+          <span class="info-value"><%= @quiz.questions.count %></span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Estimated Time</span>
+          <span class="info-value"><%= ((@quiz.questions.count * 1.5).ceil) %> minutes</span>
+        </div>
+      </div>
+    </div>
+
+    <form action="<%= quiz_submissions_path(@quiz) %>" method="post" id="quiz-form" class="quiz-form">
+      <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+      
+      <div class="questions-section">
+        <h2>Quiz Questions</h2>
+        
+        <% @quiz.questions.each_with_index do |question, index| %>
+          <div class="question-block">
+            <div class="question-number">Question <%= index + 1 %> of <%= @quiz.questions.count %></div>
+            <div class="question-text">
+              <%= simple_format(question.body) %>
+            </div>
+
+            <div class="question-content">
+              <% if question.scq? %>
+                <!-- Single Choice Question (SCQ) - Radio Buttons -->
+                <fieldset class="options-fieldset">
+                  <% question.options.each_with_index do |option, option_index| %>
+                    <div class="option-wrapper">
+                      <label class="option-label">
+                        <input type="radio"
+                               name="answers[<%= question.id %>]"
+                               value="<%= option.id %>"
+                               class="option-input" />
+                        <span class="option-content">
+                          <span class="option-letter"><%= ('A'.ord + option_index).chr %>)</span>
+                          <span class="option-text"><%= option.text %></span>
+                        </span>
+                      </label>
+                    </div>
+                  <% end %>
+                </fieldset>
+              <% elsif question.mcq? %>
+                <!-- Multiple Choice Question (MCQ) - Checkboxes -->
+                <fieldset class="options-fieldset">
+                  <% question.options.each_with_index do |option, option_index| %>
+                    <div class="option-wrapper">
+                      <label class="option-label">
+                        <input type="checkbox"
+                               name="answers[<%= question.id %>][]"
+                               value="<%= option.id %>"
+                               class="option-input" />
+                        <span class="option-content">
+                          <span class="option-letter"><%= ('A'.ord + option_index).chr %>)</span>
+                          <span class="option-text"><%= option.text %></span>
+                        </span>
+                      </label>
+                    </div>
+                  <% end %>
+                </fieldset>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary btn-large">Submit Quiz</button>
+        <%= link_to "← Back to Quizzes", quizzes_path, class: "btn btn-secondary" %>
+      </div>
+    </form>
+  </div>
+</div>
+
+<style>
+  .public-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+  }
+
+  .quiz-container {
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+  }
+
+  .quiz-header {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+    padding: 40px;
+  }
+
+  .quiz-header h1 {
+    margin: 0 0 15px 0;
+    font-size: 2rem;
+    font-weight: 700;
+  }
+
+  .quiz-description {
+    margin: 0 0 25px 0;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    opacity: 0.95;
+  }
+
+  .quiz-info {
+    display: flex;
+    gap: 30px;
+    margin-top: 15px;
+  }
+
+  .info-item {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .info-label {
+    font-size: 0.9rem;
+    opacity: 0.85;
+  }
+
+  .info-value {
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+
+  .quiz-form {
+    padding: 40px;
+  }
+
+  .form-section {
+    margin-bottom: 40px;
+  }
+
+  .form-section h2 {
+    margin: 0 0 25px 0;
+    font-size: 1.3rem;
+    color: #333;
+    font-weight: 600;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #007bff;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+    font-size: 0.95rem;
+  }
+
+  .form-label.required::after {
+    content: " *";
+    color: #dc3545;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: all 0.2s ease;
+  }
+
+  .form-control:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+  }
+
+  .quiz-form {
+    padding: 40px;
+  }
+
+  .form-section {
+    margin-bottom: 40px;
+  }
+
+  .form-section h2 {
+    margin: 0 0 25px 0;
+    font-size: 1.3rem;
+    color: #333;
+    font-weight: 600;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #007bff;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+    font-size: 0.95rem;
+  }
+
+  .form-label.required::after {
+    content: " *";
+    color: #dc3545;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: all 0.2s ease;
+  }
+
+  .form-control:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+  }
+
+  .questions-section {
+    margin-bottom: 40px;
+  }
+
+  .questions-section h2 {
+    margin: 0 0 30px 0;
+    font-size: 1.3rem;
+    color: #333;
+    font-weight: 600;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #007bff;
+  }
+
+  .question-block {
+    background: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 25px;
+    margin-bottom: 25px;
+  }
+
+  .question-number {
+    font-size: 0.85rem;
+    color: #666;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+  }
+
+  .question-text {
+    font-size: 1.15rem;
+    color: #222;
+    font-weight: 500;
+    line-height: 1.6;
+    margin-bottom: 25px;
+  }
+
+  .question-content {
+    margin-top: 15px;
+  }
+
+  .options-fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .option-wrapper {
+    margin-bottom: 12px;
+  }
+
+  .option-label {
+    display: flex;
+    align-items: flex-start;
+    padding: 12px 14px;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .option-label:hover {
+    background: #f0f7ff;
+    border-color: #007bff;
+  }
+
+  .option-input {
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    margin-right: 12px;
+    margin-top: 2px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .option-input:checked + .option-content {
+    color: #007bff;
+    font-weight: 500;
+  }
+
+  .option-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: color 0.2s ease;
+  }
+
+  .option-letter {
+    font-weight: 600;
+    min-width: 28px;
+    color: #666;
+  }
+
+  .option-text {
+    flex: 1;
+    color: #444;
+  }
+
+  .form-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 1px solid #e0e0e0;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.95rem;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+    flex: 1;
+  }
+
+  .btn-primary:hover {
+    background: linear-gradient(135deg, #0056b3 0%, #003d82 100%);
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+    transform: translateY(-2px);
+  }
+
+  .btn-secondary {
+    background: #6c757d;
+    color: white;
+  }
+
+  .btn-secondary:hover {
+    background: #545b62;
+  }
+
+  .btn-large {
+    padding: 14px 28px;
+    font-size: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    .public-container {
+      padding: 20px 15px;
+    }
+
+    .quiz-header {
+      padding: 30px 20px;
+    }
+
+    .quiz-header h1 {
+      font-size: 1.5rem;
+    }
+
+    .quiz-info {
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .quiz-form {
+      padding: 25px 20px;
+    }
+
+    .question-block {
+      padding: 20px;
+    }
+
+    .form-actions {
+      flex-direction: column;
+    }
+
+    .btn-primary {
+      width: 100%;
+    }
+  }
+</style>
