@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_17_120000) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_17_120005) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -21,4 +21,55 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_17_120000) do
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_admin_users_on_email", unique: true
   end
+
+  create_table "attempt_answers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.boolean "correct"
+    t.datetime "created_at", null: false
+    t.uuid "question_id", null: false
+    t.text "selected_option_ids"
+    t.uuid "submission_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["question_id"], name: "index_attempt_answers_on_question_id"
+    t.index ["submission_id"], name: "index_attempt_answers_on_submission_id"
+  end
+
+  create_table "options", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.boolean "correct", default: false
+    t.datetime "created_at", null: false
+    t.uuid "question_id", null: false
+    t.string "text", null: false
+    t.datetime "updated_at", null: false
+    t.index ["question_id"], name: "index_options_on_question_id"
+  end
+
+  create_table "questions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.text "body", null: false
+    t.datetime "created_at", null: false
+    t.string "question_type", null: false
+    t.uuid "quiz_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["quiz_id"], name: "index_questions_on_quiz_id"
+  end
+
+  create_table "quizzes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "submissions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.uuid "quiz_id", null: false
+    t.integer "score"
+    t.integer "total_questions"
+    t.datetime "updated_at", null: false
+    t.index ["quiz_id"], name: "index_submissions_on_quiz_id"
+  end
+
+  add_foreign_key "attempt_answers", "questions"
+  add_foreign_key "attempt_answers", "submissions"
+  add_foreign_key "options", "questions"
+  add_foreign_key "questions", "quizzes"
+  add_foreign_key "submissions", "quizzes"
 end
