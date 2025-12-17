@@ -24,6 +24,14 @@
   </head>
 
   <body>
-    <%= yield %>
+    <!-- Conditional Navbar -->
+    <%= render admin_signed_in? ? 'shared/admin_navbar' : 'shared/public_navbar' %>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="container">
+        <%= yield %>
+      </div>
+    </main>
   </body>
 </html>

@@ -1,0 +1,38 @@
+<nav class="navbar navbar-admin">
+  <div class="navbar-container">
+    <div class="navbar-content">
+      <!-- Brand/Logo -->
+      <div>
+        <%= link_to admin_root_path, class: "navbar-brand" do %>
+          <span class="font-bold text-2xl">⚡</span>
+          <span>Admin Panel</span>
+        <% end %>
+      </div>
+      
+      <!-- Navigation Links -->
+      <div class="navbar-nav">
+        <%= link_to "Dashboard", admin_root_path, 
+            class: admin_nav_link_class(current_page?(admin_root_path)) %>
+        
+        <%= link_to "Quizzes", admin_quizzes_path, 
+            class: admin_nav_link_class(controller_name == 'quizzes' && admin_signed_in?) %>
+      </div>
+      
+      <!-- User Info & Actions -->
+      <div class="navbar-actions">
+        <span class="user-info">
+          👤 <%= current_admin_user.email %>
+        </span>
+        
+        <%= button_to "Logout", admin_logout_path, 
+            method: :delete,
+            class: "btn-danger",
+            form: { 
+              data: { 
+                turbo_confirm: "Are you sure you want to logout?" 
+              } 
+            } %>
+      </div>
+    </div>
+  </div>
+</nav>

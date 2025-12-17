@@ -14,5 +14,11 @@ Rails.application.routes.draw do
     # Dashboard
     get "/", to: "dashboard#index", as: :root
   end
+
+  # Public routes
+  root "quizzes#index"
+  resources :quizzes, only: [:index, :show] do
+    resources :submissions, only: [:create]
+  end
+  resources :submissions, only: [:show]
 end
-  

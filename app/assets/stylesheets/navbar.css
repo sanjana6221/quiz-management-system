@@ -1,0 +1,214 @@
+/* Common Navbar Styles */
+.navbar {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.navbar-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.navbar-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 4rem;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.navbar-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Public Navbar */
+.navbar-public {
+  background-color: white;
+  color: #111827;
+}
+
+.navbar-public .navbar-brand {
+  color: #2563eb;
+}
+
+.navbar-public .navbar-brand:hover {
+  color: #1d4ed8;
+}
+
+/* Admin Navbar */
+.navbar-admin {
+  background-color: #111827;
+  color: white;
+}
+
+.navbar-admin .navbar-brand {
+  color: white;
+}
+
+.navbar-admin .navbar-brand:hover {
+  color: #e5e7eb;
+}
+
+/* Button Styles */
+.btn-primary {
+  background-color: #2563eb;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  display: inline-block;
+  transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+  background-color: #1d4ed8;
+}
+
+.btn-danger {
+  background-color: #dc2626;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-danger:hover {
+  background-color: #b91c1c;
+}
+
+/* Navigation Links */
+.nav-link {
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.nav-link-public {
+  color: #374151;
+}
+
+.nav-link-public:hover {
+  color: #2563eb;
+  background-color: #f3f4f6;
+}
+
+.nav-link-admin {
+  color: #d1d5db;
+}
+
+.nav-link-admin:hover {
+  color: white;
+  background-color: #374151;
+}
+
+/* Active States */
+.nav-link-active-public {
+  background-color: #dbeafe;
+  color: #1d4ed8;
+}
+
+.nav-link-active-admin {
+  background-color: #374151;
+  color: white;
+}
+
+/* User Info */
+.user-info {
+  font-size: 0.875rem;
+  color: #d1d5db;
+}
+
+/* Main Content */
+.main-content {
+  padding: 2rem 0;
+  min-height: calc(100vh - 4rem);
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Flash Messages */
+.flash {
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 0.375rem;
+  font-weight: 500;
+}
+
+.flash-notice {
+  background-color: #d1fae5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+.flash-alert {
+  background-color: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+
+/* Form Elements */
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .navbar-nav {
+    display: none;
+  }
+  
+  .navbar-container {
+    padding: 0 0.5rem;
+  }
+}
