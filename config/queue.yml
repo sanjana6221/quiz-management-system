@@ -15,4 +15,8 @@ test:
   <<: *default
 
 production:
+  connects_to:
+    database:
+      writing: primary
+      reading: primary
   <<: *default
