@@ -9,6 +9,8 @@ Rails.application.routes.draw do
     get "login", to: "sessions#new", as: :login
     delete "logout", to: "sessions#destroy", as: :logout
 
+    root "quizzes#index"
+
     # Quiz Management
     resources :quizzes do
       resources :questions, except: [ :index, :show ] do
@@ -16,4 +18,13 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  # Public routes
+  root "quizzes#index"
+
+  resources :quizzes, only: [ :index, :show ] do
+    resources :submissions, only: [ :create ]
+  end
+
+  resources :submissions, only: [ :show ]
 end

@@ -1,0 +1,85 @@
+<% content_for :page_title, @quiz.title %>
+
+<div class="public-container">
+  <div class="quiz-container">
+    <div class="quiz-header">
+      <h1><%= @quiz.title %></h1>
+      <% if @quiz.description.present? %>
+        <p class="quiz-description"><%= simple_format(@quiz.description) %></p>
+      <% end %>
+      
+      <div class="quiz-info">
+        <div class="info-item">
+          <span class="info-label">Questions</span>
+          <span class="info-value"><%= @quiz.questions.count %></span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Estimated Time</span>
+          <span class="info-value"><%= ((@quiz.questions.count * 1.5).ceil) %> minutes</span>
+        </div>
+      </div>
+    </div>
+
+    <form action="<%= quiz_submissions_path(@quiz) %>" method="post" id="quiz-form" class="quiz-form">
+      <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+      
+      <div class="questions-section">
+        <h2>Quiz Questions</h2>
+        
+        <% @quiz.questions.each_with_index do |question, index| %>
+          <div class="question-block">
+            <div class="question-number">Question <%= index + 1 %> of <%= @quiz.questions.count %></div>
+            <div class="question-text">
+              <%= simple_format(question.body) %>
+            </div>
+
+            <div class="question-content">
+              <% if question.scq? %>
+                <!-- Single Choice Question (SCQ) - Radio Buttons -->
+                <fieldset class="options-fieldset">
+                  <% question.options.each_with_index do |option, option_index| %>
+                    <div class="option-wrapper">
+                      <label class="option-label">
+                        <input type="radio"
+                               name="answers[<%= question.id %>]"
+                               value="<%= option.id %>"
+                               class="option-input" />
+                        <span class="option-content">
+                          <span class="option-letter"><%= ('A'.ord + option_index).chr %>)</span>
+                          <span class="option-text"><%= option.text %></span>
+                        </span>
+                      </label>
+                    </div>
+                  <% end %>
+                </fieldset>
+              <% elsif question.mcq? %>
+                <!-- Multiple Choice Question (MCQ) - Checkboxes -->
+                <fieldset class="options-fieldset">
+                  <% question.options.each_with_index do |option, option_index| %>
+                    <div class="option-wrapper">
+                      <label class="option-label">
+                        <input type="checkbox"
+                               name="answers[<%= question.id %>][]"
+                               value="<%= option.id %>"
+                               class="option-input" />
+                        <span class="option-content">
+                          <span class="option-letter"><%= ('A'.ord + option_index).chr %>)</span>
+                          <span class="option-text"><%= option.text %></span>
+                        </span>
+                      </label>
+                    </div>
+                  <% end %>
+                </fieldset>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary btn-large">Submit Quiz</button>
+        <%= link_to "← Back to Quizzes", quizzes_path, class: "btn btn-secondary" %>
+      </div>
+    </form>
+  </div>
+</div>

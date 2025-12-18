@@ -1,0 +1,47 @@
+<% content_for :page_title, "Available Quizzes" %>
+
+<div class="public-container">
+  <div class="page-header">
+    <h1>📚 Available Quizzes</h1>
+    <p class="subtitle">Select a quiz to test your knowledge</p>
+  </div>
+
+  <% if @quizzes.any? %>
+    <div class="quizzes-grid">
+      <% @quizzes.each do |quiz| %>
+        <div class="quiz-card">
+          <div class="quiz-card-header">
+            <h3><%= link_to quiz.title, quiz_path(quiz), class: "quiz-title-link" %></h3>
+          </div>
+          
+          <% if quiz.description.present? %>
+            <div class="quiz-card-description">
+              <p><%= truncate(quiz.description, length: 150, omission: '...') %></p>
+            </div>
+          <% end %>
+          
+          <div class="quiz-card-meta">
+            <div class="meta-item">
+              <span class="meta-icon">❓</span>
+              <span class="meta-value"><%= quiz.questions.count %> Questions</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-icon">⏱️</span>
+              <span class="meta-value">Est. <%= (quiz.questions.count * 1.5).ceil %> min</span>
+            </div>
+          </div>
+
+          <div class="quiz-card-actions">
+            <%= link_to "Start Quiz →", quiz_path(quiz), class: "btn btn-primary" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="empty-state">
+      <div class="empty-state-icon">📝</div>
+      <h2>No Quizzes Available</h2>
+      <p>There are currently no quizzes available. Please check back later!</p>
+    </div>
+  <% end %>
+</div>

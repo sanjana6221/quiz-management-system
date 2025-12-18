@@ -1,0 +1,42 @@
+
+<nav class="navbar">
+  <div class="navbar-container">
+    <div class="navbar-content">
+      <div>
+        <%= link_to root_path do %>
+          <span class="font-bold text-2xl">⚡</span>
+          <span>Home</span>
+        <% end %>
+      </div>
+
+      <div class="navbar-nav">
+        <%= link_to "Take Quiz", quizzes_path, 
+            class: "nav-link" %>
+        
+        <%= link_to "Quizzes", admin_quizzes_path, 
+            class: "nav-link" %>
+      </div>
+      
+      <!-- Actions -->
+      <div class="navbar-actions">
+        <% if admin_signed_in? %>
+            <span class="user-info">
+            👤 <%= current_admin_user.email %>
+            </span>
+            
+            <%= button_to "Logout", admin_logout_path, 
+                method: :delete,
+                class: "btn-danger",
+                form: { 
+                data: { 
+                    turbo_confirm: "Are you sure you want to logout?" 
+                } 
+                } %>
+        <% else %>
+            <%= link_to "Admin Sign In", admin_login_path, 
+            class: "btn-primary" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</nav>
