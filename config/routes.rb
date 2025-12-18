@@ -8,5 +8,12 @@ Rails.application.routes.draw do
     resource :session, only: [ :new, :create, :destroy ]
     get "login", to: "sessions#new", as: :login
     delete "logout", to: "sessions#destroy", as: :logout
+
+    # Quiz Management
+    resources :quizzes do
+      resources :questions, except: [ :index, :show ] do
+        resources :options, except: [ :index, :show ]
+      end
+    end
   end
 end
